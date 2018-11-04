@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "lint": "esw *.js server config --color",
+    "lint": "esw *.js config --color",
     "lint:watch": "yarn lint -- --watch",
     "precommit": "yarn lint"
   },

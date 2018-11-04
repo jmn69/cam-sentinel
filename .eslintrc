@@ -25,13 +25,12 @@
     "no-underscore-dangle": [0]
   },
   "env": {
-    "node": true,
-    "jest/globals": true
+    "node": true
   },
-  "plugins": ["import", "jest"],
+  "plugins": ["import"],
   "parserOptions": {
     "ecmaVersion": 2017,
     "sourceType": "module"
   },
-  "extends": ["eslint:recommended", "airbnb-base", "plugin:jest/recommended"]
+  "extends": ["eslint:recommended", "airbnb-base"]
 }
