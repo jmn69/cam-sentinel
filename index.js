@@ -46,24 +46,24 @@ const watchFoscamState = async () => {
                 Camera.update(
                   { _id: camera.id },
                   { $set: { ioAlarm: Number(result.CGI_Result.IOAlarm), isOnline: true } },
-                  (err, camera) => {
-                    if (err) {
-                      console.log(err);
+                  (error) => {
+                    if (error) {
+                      console.log(error);
                     }
                   }
                 );
               } else {
-                Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (err, camera) => {
-                  if (err) {
-                    console.log(err);
+                Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (error) => {
+                  if (error) {
+                    console.log(error);
                   }
                 });
               }
             });
           } catch (e) {
-            Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (err, camera) => {
-              if (err) {
-                console.log(err);
+            Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (error) => {
+              if (error) {
+                console.log(error);
               }
             });
           }
