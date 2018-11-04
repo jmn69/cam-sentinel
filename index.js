@@ -7,7 +7,7 @@ require('https').globalAgent.options.ca = rootCas;
 
 const https = require('https');
 
-const agent = new https.Agent({ rejectUnauthorized: false });
+const agent = new https.Agent({ rejectUnauthorized: false, timeout: 5000 });
 const config = require('./config');
 
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
@@ -23,7 +23,7 @@ mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoUri}`);
 });
 
-const Camera = require('./camera.model');
+const Camera = require('./model/camera.model');
 
 const watchFoscamState = async () => {
   try {
@@ -42,18 +42,30 @@ const watchFoscamState = async () => {
               }
             );
             parseString(response.data, { explicitArray: false }, (err, result) => {
-              if (result && result.CGI_Result && result.CGI_Result.IOAlarm) {
-                // TODO: cam online
-                console.log(`online : ${camera.privateIp}`);
-                console.log(`IOAlarm : ${result.CGI_Result.IOAlarm}`);
+              if (result && result.CGI_Result) {
+                Camera.update(
+                  { _id: camera.id },
+                  { $set: { ioAlarm: Number(result.CGI_Result.IOAlarm), isOnline: true } },
+                  (err, camera) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  }
+                );
               } else {
-                // TODO: cam offline
-                console.log(`offline: ${camera.privateIp}`);
+                Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (err, camera) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
               }
             });
           } catch (e) {
-            console.log(e);
-            // TODO: cam offline
+            Camera.update({ _id: camera.id }, { $set: { isOnline: false } }, (err, camera) => {
+              if (err) {
+                console.log(err);
+              }
+            });
           }
         }
       });
