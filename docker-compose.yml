@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  cam-sentinel:
+    build:
+      context: .
+    volumes:
+      # Mounts the project directory on the host to /app inside the container,
+      # allowing you to modify the code without having to rebuild the image.
+      - .:/app
+      # Just specify a path and let the Engine create a volume.
+      # Data present in the base image at the specified mount point will be copied
+      # over to the new volume upon volume initialization.
+      # node_modules from this new volume will be used and not from your local dev env.
+      - /app/node_modules/
+    env_file:
+      - .env
+    restart: unless-stopped
