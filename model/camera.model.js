@@ -34,7 +34,7 @@ const CameraSchema = new mongoose.Schema(
     },
     wsStreamUrl: {
       type: String,
-      required: true
+      required: false
     },
     ioAlarm: {
       type: Number,
@@ -42,7 +42,7 @@ const CameraSchema = new mongoose.Schema(
     },
     isOnline: {
       type: Boolean,
-      required: true
+      required: false
     }
   },
   { timestamps: true }
