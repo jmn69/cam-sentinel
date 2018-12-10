@@ -34,7 +34,7 @@ const watchFoscamState = async () => {
         if (camera.type === 1) {
           try {
             const response = await axios.get(
-              `https://${camera.privateIp}/cgi-bin/CGIProxy.fcgi?cmd=getDevState&usr=${
+              `https://${camera.publicDomain}/cgi-bin/CGIProxy.fcgi?cmd=getDevState&usr=${
                 camera.user
               }&pwd=${camera.pwd}`,
               {
@@ -43,9 +43,13 @@ const watchFoscamState = async () => {
             );
             parseString(response.data, { explicitArray: false }, (err, result) => {
               if (result && result.CGI_Result) {
+                const ioAlarmResult = Number(result.CGI_Result.IOAlarm);
+                if (ioAlarmResult === 2) {
+                  // TODO: fire an alarm event
+                }
                 Camera.update(
                   { _id: camera.id },
-                  { $set: { ioAlarm: Number(result.CGI_Result.IOAlarm), isOnline: true } },
+                  { $set: { ioAlarm: ioAlarmResult, isOnline: true } },
                   (error) => {
                     if (error) {
                       console.log(error);
