@@ -10,40 +10,48 @@ const CameraSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: Number,
-      required: true
+      required: true,
     },
     publicDomain: {
       type: String,
-      required: true
+      required: true,
     },
     privateIp: {
       type: String,
-      required: false
+      required: false,
+    },
+    httpsPort: {
+      type: String,
+      required: true,
+    },
+    rtspPort: {
+      type: String,
+      required: true,
     },
     pwd: {
       type: String,
-      required: true
+      required: true,
     },
     user: {
       type: String,
-      required: true
+      required: true,
     },
     wsStreamUrl: {
       type: String,
-      required: false
+      required: false,
     },
     ioAlarm: {
       type: Number,
-      required: false
+      required: false,
     },
     isOnline: {
       type: Boolean,
-      required: false
-    }
+      required: false,
+    },
   },
   { timestamps: true }
 );
@@ -72,11 +80,14 @@ CameraSchema.statics = {
   get(id) {
     return this.findById(id)
       .exec()
-      .then((camera) => {
+      .then(camera => {
         if (camera) {
           return camera;
         }
-        const err = new APIError('No such camera exists!', httpStatus.NOT_FOUND);
+        const err = new APIError(
+          'No such camera exists!',
+          httpStatus.NOT_FOUND
+        );
         return Promise.reject(err);
       });
   },
@@ -93,7 +104,7 @@ CameraSchema.statics = {
       .skip(+skip)
       .limit(+limit)
       .exec();
-  }
+  },
 };
 
 /**
