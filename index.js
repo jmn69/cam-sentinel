@@ -68,12 +68,12 @@ const handleAlarmFired = async camera => {
         alert = await Alert.findByCameraIdAndHappenedAt(camera._id, d);
       }
  catch (err) {
-        console.log(`findByCameraIdAndHappenedAt error: ${err}`);
+        // console.log(`findByCameraIdAndHappenedAt error: ${err}`);
       }
       if (alert) {
         const alertToUpdate = isImage
-          ? { imageUrl: S3data.Location }
-          : { videoUrl: S3data.Location };
+          ? { image: { key: S3data.Key, bucket: S3data.Bucket } }
+          : { video: { key: S3data.Key, bucket: S3data.Bucket } };
         try {
           Alert.updateAlert(alert._id, alertToUpdate);
         }
@@ -86,12 +86,12 @@ const handleAlarmFired = async camera => {
           ? {
               camera: camera._id,
               happenedAt: d,
-              imageUrl: S3data.Location,
+              image: { key: S3data.Key, bucket: S3data.Bucket },
             }
           : {
               camera: camera._id,
               happenedAt: d,
-              videoUrl: S3data.Location,
+              video: { key: S3data.Key, bucket: S3data.Bucket },
             };
         const alertToAdd = Alert(newAlert);
         try {

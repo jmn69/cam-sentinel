@@ -10,8 +10,14 @@ const Schema = mongoose.Schema;
  */
 const AlertSchema = new Schema(
   {
-    imageUrl: String,
-    videoUrl: String,
+    image: {
+      key: String,
+      bucket: String,
+    },
+    video: {
+      key: String,
+      bucket: String,
+    },
     happenedAt: {
       type: Date,
       required: true,
